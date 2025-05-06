@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PPI Calculator</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body>
+    <div class="row align-items-center">
+      <div
+        class="col-xl-6 col-lg-7 col-md-8 col-sm-9 col-xs-10 m-2 p-3 mx-auto"
+      >
+        <h1 class="text-center mb-4">PPI Calculator</h1>
+
+        <div
+          class="mt-2 mb-4 d-flex flex-column align-items-start w-50 mx-auto"
+        >
+          <label for="printSize" class="mb-1"
+            >Print Size (Tamanho da Impressão):</label
+          >
+          <select class="form-select" id="printSize">
+            <option value="a2" selected>A2</option>
+            <option value="a3">A3</option>
+            <option value="a4">A4</option>
+          </select>
+        </div>
+
+        <div class="mb-4 d-flex flex-column align-items-start w-50 mx-auto">
+          <label for="len" class="form-label"
+            >Length (px) / Comprimento (px):</label
+          >
+          <input type="number" id="len" name="len" class="form-control" />
+        </div>
+
+        <div class="mb-4 d-flex flex-column align-items-start w-50 mx-auto">
+          <label for="wid" class="form-label">Width (px) / Largura (px):</label>
+          <input type="number" id="wid" name="wid" class="form-control" />
+        </div>
+
+        <h4 class="mt-2 text-center">
+          PPI (Pixels per Inch): <span id="ppiResult">--</span>
+        </h4>
+      </div>
+    </div>
+
+    <script>
+      const paperSizes = {
+        a2: 28.63,
+        a3: 20.23,
+        a4: 14.35,
+      };
+
+      const lenInput = document.getElementById("len");
+      const widInput = document.getElementById("wid");
+      const ppiResult = document.getElementById("ppiResult");
+      const printSize = document.getElementById("printSize");
+
+      function calculatePPI() {
+        const len = parseFloat(lenInput.value);
+        const wid = parseFloat(widInput.value);
+        const selectedSize = printSize.value;
+        const diagonalInches = paperSizes[selectedSize];
+
+        if (!isNaN(len) && !isNaN(wid) && len > 0 && wid > 0) {
+          const diagonalPixels = Math.sqrt(len ** 2 + wid ** 2);
+          const ppi = (diagonalPixels / diagonalInches).toFixed(2);
+          ppiResult.textContent = ppi;
+        } else {
+          ppiResult.textContent = "--";
+        }
+      }
+
+      lenInput.addEventListener("input", calculatePPI);
+      widInput.addEventListener("input", calculatePPI);
+      printSize.addEventListener("change", calculatePPI);
+
+      window.addEventListener("DOMContentLoaded", () => {
+        printSize.value = "a2";
+      });
+    </script>
+  </body>
+</html>
